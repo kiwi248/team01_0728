@@ -1,9 +1,11 @@
 .venv/
+venv/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
+.env
 .env.*
 !.env.example
 .pytest_cache/
@@ -18,4 +20,3 @@ sample.txt
 !.vscode/
 !.vscode/settings.json
 sym.py
-main.py
