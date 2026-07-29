@@ -5,8 +5,6 @@ import pandas as pd
 import streamlit as st
 
 
-st.set_page_config(page_title="1반 성적 대시보드", page_icon="📊", layout="wide")
-
 st.markdown(
     """
     <style>
