@@ -5,19 +5,6 @@ import pandas as pd
 import streamlit as st
 
 
-SAMPLE_DATA = [
-    {"id": 1, "subject": "Python", "score": 100},
-    {"id": 2, "subject": "Streamlit", "score": 95},
-    {"id": 3, "subject": "FastAPI", "score": 90},
-    {"id": 4, "subject": "Python", "score": 88},
-    {"id": 5, "subject": "Streamlit", "score": 92},
-    {"id": 6, "subject": "FastAPI", "score": 85},
-    {"id": 7, "subject": "Python", "score": 97},
-    {"id": 8, "subject": "Streamlit", "score": 78},
-    {"id": 9, "subject": "FastAPI", "score": 83},
-    {"id": 10, "subject": "Python", "score": 94},
-]
-
 st.set_page_config(page_title="1반 성적 대시보드", page_icon="📊", layout="wide")
 
 st.markdown(
@@ -110,26 +97,16 @@ with st.sidebar:
         value=default_api_url,
         help="class1_sym_service.py 데이터를 반환하는 GET 주소를 입력하세요.",
     )
-    use_sample = st.toggle(
-        "샘플 데이터로 미리보기",
-        value=False,
-        help="백엔드 서버를 실행하지 않았을 때만 켜 주세요.",
-    )
     if st.button("데이터 새로고침", use_container_width=True):
         fetch_students.clear()
         st.rerun()
 
-data_source = "샘플 데이터"
-if use_sample:
-    raw_data = SAMPLE_DATA
-else:
-    try:
-        raw_data = fetch_students(api_url)
-        data_source = "API 연결됨"
-    except (httpx.HTTPError, ValueError) as error:
-        st.error(f"API 데이터를 불러오지 못했습니다: {error}")
-        st.info("왼쪽에서 샘플 데이터 미리보기를 켜거나 API 주소를 확인해 주세요.")
-        st.stop()
+try:
+    raw_data = fetch_students(api_url)
+except (httpx.HTTPError, ValueError) as error:
+    st.error(f"API 데이터를 불러오지 못했습니다: {error}")
+    st.info("백엔드 서버 실행 상태와 왼쪽의 API 주소를 확인해 주세요.")
+    st.stop()
 
 try:
     df = make_dataframe(raw_data)
@@ -146,7 +123,7 @@ st.markdown(
     '<div class="dashboard-subtitle">Python · Streamlit · FastAPI 과목 성적을 한눈에 확인하세요.</div>',
     unsafe_allow_html=True,
 )
-st.markdown(f'<span class="status-badge">● {data_source}</span>', unsafe_allow_html=True)
+st.markdown('<span class="status-badge">● API 연결됨</span>', unsafe_allow_html=True)
 
 all_subjects = sorted(df["subject"].unique().tolist())
 selected_subjects = st.multiselect(
