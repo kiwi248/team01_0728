@@ -100,7 +100,7 @@ def score_grade(score: float) -> str:
 
 default_api_url = os.getenv(
     "CLASS1_API_URL",
-    "http://127.0.0.1:8000/class1/students",
+    "http://192.100.200.198:8000/student/getall",
 )
 
 with st.sidebar:
@@ -110,7 +110,11 @@ with st.sidebar:
         value=default_api_url,
         help="class1_sym_service.py 데이터를 반환하는 GET 주소를 입력하세요.",
     )
-    use_sample = st.toggle("샘플 데이터로 미리보기", value=True)
+    use_sample = st.toggle(
+        "샘플 데이터로 미리보기",
+        value=False,
+        help="백엔드 서버를 실행하지 않았을 때만 켜 주세요.",
+    )
     if st.button("데이터 새로고침", use_container_width=True):
         fetch_students.clear()
         st.rerun()
